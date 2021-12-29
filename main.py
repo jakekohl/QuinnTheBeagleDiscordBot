@@ -8,6 +8,7 @@ from replit import db
 # Code so far comes from the Discord Bot tutorial @ https://www.freecodecamp.org/news/create-a-discord-bot-with-python/
 
 client = discord.Client()
+greetings = ['hello','hey','yo','howdy','greetings']
 sad_words = ['sad', 'depressed', 'unhappy', 'angry', 'miserable']
 starter_encouragements = ['Cheer up!','Hang in there.','You are a great person / bot!']
 
@@ -29,14 +30,16 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('Hello'):
-        await message.channel.send('Hello!')
+    msg = message.content
+    first_word_message = msg.split(' ',1)
+    first_word = first_word_message[0].lower()
+    if first_word in (tuple(greetings)):
+        await message.channel.send('Hi friend!')
 
     if message.content.startswith('!inspire'):
         quote = get_quote()
         await message.channel.send(quote)
 
-    msg = message.content
     if any(word in msg for word in sad_words):
       await message.channel.send(random.choice(starter_encouragements))    
 
