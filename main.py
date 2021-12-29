@@ -10,13 +10,18 @@ from replit import db
 # Set Logging Config
 logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', level=logging.INFO)
 
-# Code so far comes from the Discord Bot tutorial @ https://www.freecodecamp.org/news/create-a-discord-bot-with-python/
+# Much of this code so far comes from the Discord Bot tutorial @ https://www.freecodecamp.org/news/create-a-discord-bot-with-python/
 
 client = discord.Client()
+
+# Instantiate lists here for responsiveness
 greetings = ['hello','hey','yo','howdy','greetings','hi','heyo']
 sad_words = ['sad', 'depressed', 'unhappy', 'angry', 'miserable']
 starter_encouragements = ['Cheer up!','Hang in there.','You are a great person / bot!']
 happy_words = ['treat','walk','let\'s go','good girl']
+
+
+## Functions Section
 
 # Pulls a random quote from zenquotes.com using their API
 def get_quote():
@@ -26,7 +31,7 @@ def get_quote():
   return(quote)
 
 
-# Main code runs here
+# Main code runs here for the most part.
 @client.event
 async def on_ready():
     logging.info('We have logged in as {0.user}'.format(client))
