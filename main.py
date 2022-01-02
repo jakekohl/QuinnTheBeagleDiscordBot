@@ -14,11 +14,14 @@ logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', level=loggi
 
 client = discord.Client()
 
-# Instantiate lists here for responsiveness
+# Instantiate lists for triggers
 greetings = ['hello','hey','yo','howdy','greetings','hi','heyo']
 sad_words = ['sad', 'depressed', 'unhappy', 'angry', 'miserable']
-starter_encouragements = ['Cheer up!','Hang in there.','You are a great person / bot!']
 happy_words = ['treat','walk','let\'s go','good girl']
+
+# Lists of responses
+starter_encouragements = ['Cheer up!','Hang in there.','You are a great person / bot!']
+loves = ['I love my Dad!','I love curling up next to my mom!','I love chewing on bones!','I love chasing after squirrels, birds, and most importantly, Bunnies!']
 
 
 ## Functions Section
