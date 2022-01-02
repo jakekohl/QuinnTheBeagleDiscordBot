@@ -26,6 +26,9 @@ happy_words = ['treat', 'walk', 'let\'s go', 'good girl']
 starter_encouragements = ['Cheer up!', 'Hang in there.', 'You are a great person / bot!']
 loves = ['I love my Dad!', 'I love curling up next to my mom!','I love chewing on bones!','I love chasing after squirrels, birds, and most importantly, Bunnies!']
 
+## Configuration
+if "responding" not in db.keys():
+  db["responding"] = True
 
 
 ## Functions Section
@@ -93,10 +96,11 @@ async def on_message(message):
 
     # Checks to see if I should send a word of encouragement
     # Also contains functionality to add/delete encouraging words submitted by users
-    options = starter_encouragements
-    if 'encouragements' in db.keys():
-      options = options + list(db['encouragements'])
-    if any(word in msg for word in sad_words):
+    if db["responding"]:
+      options = starter_encouragements
+      if 'encouragements' in db.keys():
+        options = options + list(db['encouragements'])
+      if any(word in msg for word in sad_words):
         await message.channel.send(random.choice(options))
         logging.debug('Sent a word of encouragement to my friend!')
     
@@ -115,8 +119,7 @@ async def on_message(message):
         encouragements = list(db['encouragements'])
       await message.channel.send(encouragements)
     if msg.startswith('!query'):
-      key = msg.split('!query',1)[1]
-      key = key.split(" ",1)[1]
+      key = msg.split('!query ',1)[1]
       logging.debug('User submitted Key: '+key)
       results = retrieve_db_contents(key)
       await message.channel.send(results)
@@ -125,6 +128,23 @@ async def on_message(message):
     if any(word in msg for word in happy_words):
         await message.channel.send('*Wags tail*')
         logging.debug('I am happily wagging my tail.')
+    
+    # option to update responding key or retrieve the current value
+    if msg.startswith("$responding"):
+      if int(len(msg)) > 11:
+        value = msg.split("$responding ",1)[1]
+        if value == "true":
+          db["responding"] = True
+          await message.channel.send("Responding is on.")
+        elif value == 'false':
+          db["responding"] = False
+          await message.channel.send("Responding is off.")
+        else:
+          await message.channel.send("I don't understand this command. Please provide a true or false value so I can update this configuration properly.")
+      else:
+        key = msg.split('$',1)[1]
+        response = db[key]
+        await message.channel.send("Responding Config: "+ str(response))
 
 
 client.run(os.getenv('TOKEN'))
