@@ -121,7 +121,7 @@ async def on_message(message):
       encouragements = []
       if 'encouragements' in db.keys():
         index = int(msg.split('!del',1)[1])
-        logging.debug(f'index variable: {str(index)}'')
+        logging.debug(f'index variable: {str(index)}')
         delete_encouragment(index)
         encouragements = list(db['encouragements'])
       await message.channel.send(encouragements)
