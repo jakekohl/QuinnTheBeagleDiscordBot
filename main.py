@@ -6,10 +6,11 @@ import random
 import string
 import logging
 from replit import db
+from keep_alive import keep_alive
 
 # Set Logging Config
 logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s',
-                    level=logging.DEBUG)
+                    level=logging.INFO)
 
 # Much of this code so far comes from the Discord Bot tutorial @ https://www.freecodecamp.org/news/create-a-discord-bot-with-python/
 
@@ -146,5 +147,5 @@ async def on_message(message):
         response = db[key]
         await message.channel.send("Responding Config: "+ str(response))
 
-
+keep_alive()
 client.run(os.getenv('TOKEN'))
