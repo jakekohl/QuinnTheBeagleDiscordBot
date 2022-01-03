@@ -19,7 +19,7 @@ client = discord.Client()
 ## Lists sections
 
 # Instantiate lists for triggers
-greetings = ['hello', 'hey', 'yo', 'howdy', 'greetings', 'hi', 'heyo']
+greetings = ['hello', 'hey', 'yo', 'howdy', 'greetings', 'hi', 'heyo','quinn']
 sad_words = ['sad', 'depressed', 'unhappy', 'angry', 'miserable']
 happy_words = ['treat', 'walk', 'let\'s go', 'good girl']
 
@@ -125,6 +125,8 @@ async def on_message(message):
         delete_encouragment(index)
         encouragements = list(db['encouragements'])
       await message.channel.send(encouragements)
+
+    # Logic to pull contents from db[] based off of key
     if msg.startswith('!query'):
       key = msg.split('!query ',1)[1]
       logging.debug('User submitted Key: '+key)
