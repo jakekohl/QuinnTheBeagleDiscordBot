@@ -41,7 +41,7 @@ def get_quote():
     quote = json_data[0]['q'] + ' -' + json_data[0]['a']
     return (quote)
 
-# update and delete encouragements from the database
+# update encouragements from the database
 def update_encouragements(encouraging_message):
   if 'encouragements' in db.keys():
     encouragements = db['encouragements']
@@ -50,23 +50,29 @@ def update_encouragements(encouraging_message):
   else:
     db['encouragements'] = [encouraging_message]
 
+# delete encouragements from the database
 def delete_encouragment(index):
   encouragements = db['encouragements']
   if len(encouragements) > index:
     del encouragements[index]
   db['encouragements'] = encouragements
 
+# Retrieve contents from db[] based on key in the list format
 def retrieve_db_contents(table):
   key = table 
   contents = list(db[key])
   return contents
 
-# Main code runs here for the most part.
+# TODO: implement retrieve_db_contents for other datatypes
+
+
+
+# Defining logic paths for logging into servers
 @client.event
 async def on_ready():
     logging.info('We have logged in as {0.user}'.format(client))
 
-
+# Defining logic paths for message events
 @client.event
 async def on_message(message):
     if message.author == client.user:
@@ -147,5 +153,7 @@ async def on_message(message):
         response = db[key]
         await message.channel.send("Responding Config: "+ str(response))
 
+
+# Main Client code
 keep_alive()
 client.run(os.getenv('TOKEN'))
