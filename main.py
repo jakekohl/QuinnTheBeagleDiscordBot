@@ -81,17 +81,17 @@ async def on_message(message):
     # Massage content by making msg iterable in all lower case. Special use case for removing punctuation for greetings
     msg = message.content.lower()
     if ' ' not in (msg):
-        logging.debug('String Input: ' + message.content)
+        logging.debug(f'String Input: {message.content}')
         first_word_message = msg.translate(
             str.maketrans('', '', string.punctuation))
-        logging.debug('first_word_message: ' + first_word_message)
+        logging.debug(f'first_word_message: {first_word_message}')
         first_word = first_word_message
     else:
         first_word_message = msg.split(' ', 1)
         first_word = first_word_message[0]
 
     # Check to see if I should say hi friend
-    logging.debug('This is my first_word: ' + first_word)
+    logging.debug(f'This is my first_word: {first_word}')
     if first_word in (tuple(greetings)):
         await message.channel.send('Hi friend!')
 
@@ -99,7 +99,7 @@ async def on_message(message):
     if message.content.startswith('!inspire'):
         quote = get_quote()
         await message.channel.send(quote)
-        logging.debug('Sent the following quote: ' + quote)
+        logging.debug(f'Sent the following quote: {quote}')
 
     # Checks to see if I should send a word of encouragement
     # Also contains functionality to add/delete encouraging words submitted by users
@@ -114,14 +114,14 @@ async def on_message(message):
     # Logic to add / delete encouragement statements from the database
     if msg.startswith('!new'):
       encouraging_message = msg.split('!new ',1)[1]
-      logging.debug('User submitted encouraging_message: '+encouraging_message)
+      logging.debug(f'User submitted encouraging_message: {encouraging_message}')
       update_encouragements(encouraging_message)
-      await message.channel.send('New encouraging message added.')
+      await message.channel.send(f'New encouraging message added!: {encouraging_message}')
     if msg.startswith('!del'):
       encouragements = []
       if 'encouragements' in db.keys():
         index = int(msg.split('!del',1)[1])
-        logging.debug('index variable: '+str(index))
+        logging.debug(f'index variable: {str(index)}'')
         delete_encouragment(index)
         encouragements = list(db['encouragements'])
       await message.channel.send(encouragements)
@@ -129,7 +129,7 @@ async def on_message(message):
     # Logic to pull contents from db[] based off of key
     if msg.startswith('!query'):
       key = msg.split('!query ',1)[1]
-      logging.debug('User submitted Key: '+key)
+      logging.debug(f'User submitted Key: {key}')
       results = retrieve_db_contents(key)
       await message.channel.send(results)
 
@@ -153,7 +153,7 @@ async def on_message(message):
       else:
         key = msg.split('$',1)[1]
         response = db[key]
-        await message.channel.send("Responding Config: "+ str(response))
+        await message.channel.send(f'Responding Config: {str(response)}')
 
 
 # Main Client code
