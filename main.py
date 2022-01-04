@@ -7,6 +7,7 @@ import string
 import logging
 from replit import db
 from keep_alive import keep_alive
+from database import *
 
 # Set Logging Config
 logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s',
@@ -14,20 +15,6 @@ logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s',
 
 client = nextcord.Client()
 
-## Lists sections
-
-# Instantiate lists for triggers
-greetings = ['hello', 'hey', 'yo', 'howdy', 'greetings', 'hi', 'heyo','quinn']
-sad_words = ['sad', 'depressed', 'unhappy', 'angry', 'miserable']
-happy_words = ['treat', 'walk', 'let\'s go', 'good girl']
-
-# Lists of responses
-starter_encouragements = ['Cheer up!', 'Hang in there.', 'You are a great person / bot!']
-loves = ['I love my Dad!', 'I love curling up next to my mom!','I love chewing on bones!','I love chasing after squirrels, birds, and most importantly, Bunnies!']
-
-## Configuration
-if "responding" not in db.keys():
-  db["responding"] = True
 
 
 ## Functions Section
@@ -38,32 +25,6 @@ def get_quote():
     json_data = json.loads(response.text)
     quote = json_data[0]['q'] + ' -' + json_data[0]['a']
     return (quote)
-
-# update encouragements from the database
-def update_encouragements(encouraging_message):
-  if 'encouragements' in db.keys():
-    encouragements = db['encouragements']
-    encouragements.append(encouraging_message)
-    db['encouragements'] = encouragements
-  else:
-    db['encouragements'] = [encouraging_message]
-
-# delete encouragements from the database
-def delete_encouragment(index):
-  encouragements = db['encouragements']
-  if len(encouragements) > index:
-    del encouragements[index]
-  db['encouragements'] = encouragements
-
-# Retrieve contents from db[] based on key in the list format
-def retrieve_db_contents(table):
-  key = table 
-  contents = list(db[key])
-  return contents
-
-# TODO: implement retrieve_db_contents for other datatypes
-
-
 
 # Defining logic paths for logging into servers
 @client.event
@@ -121,30 +82,38 @@ If you have any questions, my owner can help out! I am, after all, just a loving
         await message.channel.send(random.choice(options))
         logging.debug('Sent a word of encouragement to my friend!')
     
-    # Logic to add / delete encouragement statements from the database
-    if msg.startswith('!new'):
-      encouraging_message = msg.split('!new ',1)[1]
-      logging.debug(f'User submitted encouraging_message: {encouraging_message}')
-      update_encouragements(encouraging_message)
-      await message.channel.send(f'New encouraging message added!: {encouraging_message}')
-    if msg.startswith('!del'):
-      encouragements = []
-      if 'encouragements' in db.keys():
-        index = int(msg.split('!del',1)[1])
-        logging.debug(f'index variable: {str(index)}')
-        delete_encouragment(index)
-        encouragements = list(db['encouragements'])
-      await message.channel.send(encouragements)
+
+    # Database Interactions
+    if msg.startswith('!keys'):
+      keyList = getKeys()
+      await message.channel.send(keyList)
 
     # Logic to pull contents from db[] based off of key
     if msg.startswith('!query'):
       key = msg.split('!query ',1)[1]
       logging.debug(f'User submitted Key: {key}')
       try:
-        results = retrieve_db_contents(key)
+        results = getKeyValues(key)
         await message.channel.send(results)
       except KeyError as e:
         await message.channel.send(f'{KeyError}: The key {e} does not exist!')
+
+
+    # Logic to add / delete encouragement statements from the database
+    if msg.startswith('!new'):
+      encouraging_message = msg.split('!new ',1)[1]
+      logging.debug(f'User submitted encouraging_message: {encouraging_message}')
+      appendKeyValue('encouragements',encouraging_message)
+      await message.channel.send(f'New encouraging message added!: {encouraging_message}')
+    if msg.startswith('!del'):
+      encouragements = []
+      if 'encouragements' in db.keys():
+        index = int(msg.split('!del',1)[1])
+        logging.debug(f'index variable: {str(index)}')
+        deleteKeyValue('encouragements',index)
+        encouragements = list(db['encouragements'])
+      await message.channel.send(encouragements)
+
 
     # Check to see if I should be wagging my tail
     if any(word in msg for word in happy_words):
@@ -156,10 +125,10 @@ If you have any questions, my owner can help out! I am, after all, just a loving
       if int(len(msg)) > 11:
         value = msg.split("$responding ",1)[1]
         if value == "true":
-          db["responding"] = True
+          setKeyValue('responding','True')
           await message.channel.send("Responding is on.")
         elif value == 'false':
-          db["responding"] = False
+          setKeyValue('responding','False')
           await message.channel.send("Responding is off.")
         else:
           await message.channel.send("I don't understand this command. Please provide a true or false value so I can update this configuration properly.")
