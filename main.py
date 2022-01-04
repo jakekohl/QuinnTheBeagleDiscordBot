@@ -7,24 +7,25 @@ import string
 import logging
 from replit import db
 from keep_alive import keep_alive
-from database import *
+from quinnDB import *
+from firstTimeReplDBLoad import onStart
 
 # Set Logging Config
 logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s',
                     level=logging.INFO)
 
 client = nextcord.Client()
-
-
+onStart()
+logging.info(f'Populated starting data into the database if keys don\'t exist')
 
 ## Functions Section
-
 # Pulls a random quote from zenquotes.com using their API
 def get_quote():
     response = requests.get('https://zenquotes.io/api/random')
     json_data = json.loads(response.text)
     quote = json_data[0]['q'] + ' -' + json_data[0]['a']
     return (quote)
+
 
 # Defining logic paths for logging into servers
 @client.event
