@@ -1,5 +1,4 @@
 import string
-import list
 from replit import db
 from quinnDB import *
 import logging
@@ -19,8 +18,9 @@ encouragements = ['Cheer up!', 'Hang in there.', 'You are a great person / bot!'
 loves = ['I love my Dad!', 'I love curling up next to my mom!','I love chewing on bones!','I love chasing after squirrels, birds, and most importantly, Bunnies!']
 
 # Function for populating above starting data
+
 def populateKeys(key,value):
-  if key not in db.keys():
+  if key not in getKeys():
     db[key] = value
     return logging.info(f'Inserting {key} into database with value(s): {value}')
 

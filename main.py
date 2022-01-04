@@ -52,7 +52,7 @@ async def on_message(message):
 
     # Check to see if I should say hi friend
     logging.debug(f'This is my first_word: {first_word}')
-    if first_word in (tuple(greetings)):
+    if first_word in getKeyValues('greetings'):
         await message.channel.send('Hi friend!')
 
     # Checks to see if I should be helpful or not
@@ -76,20 +76,21 @@ If you have any questions, my owner can help out! I am, after all, just a loving
     # Checks to see if I should send a word of encouragement
     # Also contains functionality to add/delete encouraging words submitted by users
     if db["responding"]:
-      options = starter_encouragements
-      if 'encouragements' in db.keys():
-        options = options + list(db['encouragements'])
-      if any(word in msg for word in sad_words):
+      if any(word in msg for word in getKeyValues('sad_words')):
         await message.channel.send(random.choice(options))
         logging.debug('Sent a word of encouragement to my friend!')
-    
+    else:
+      logging.debug(f'$responding is turned off')
+
+
 
     # Database Interactions
+    # Gets list of keys
     if msg.startswith('!keys'):
       keyList = getKeys()
       await message.channel.send(keyList)
 
-    # Logic to pull contents from db[] based off of key
+    # Get values from a key
     if msg.startswith('!query'):
       key = msg.split('!query ',1)[1]
       logging.debug(f'User submitted Key: {key}')
@@ -117,7 +118,7 @@ If you have any questions, my owner can help out! I am, after all, just a loving
 
 
     # Check to see if I should be wagging my tail
-    if any(word in msg for word in happy_words):
+    if any(word in msg for word in getKeyValues(happy_words)):
         await message.channel.send('*Wags tail*')
         logging.debug('I am happily wagging my tail.')
     
@@ -135,7 +136,7 @@ If you have any questions, my owner can help out! I am, after all, just a loving
           await message.channel.send("I don't understand this command. Please provide a true or false value so I can update this configuration properly.")
       else:
         key = msg.split('$',1)[1]
-        response = db[key]
+        response = getKeyValues(key)
         await message.channel.send(f'Responding Config: {str(response)}')
 
 
