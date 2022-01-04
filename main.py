@@ -1,4 +1,4 @@
-import discord
+import nextcord
 import os
 import requests
 import json
@@ -14,7 +14,7 @@ logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s',
 
 # Much of this code so far comes from the Discord Bot tutorial @ https://www.freecodecamp.org/news/create-a-discord-bot-with-python/
 
-client = discord.Client()
+client = nextcord.Client()
 
 ## Lists sections
 
@@ -130,8 +130,11 @@ async def on_message(message):
     if msg.startswith('!query'):
       key = msg.split('!query ',1)[1]
       logging.debug(f'User submitted Key: {key}')
-      results = retrieve_db_contents(key)
-      await message.channel.send(results)
+      try:
+        results = retrieve_db_contents(key)
+        await message.channel.send(results)
+      except KeyError as e:
+        await message.channel.send(f'{KeyError}: The key {e} does not exist!')
 
     # Check to see if I should be wagging my tail
     if any(word in msg for word in happy_words):
