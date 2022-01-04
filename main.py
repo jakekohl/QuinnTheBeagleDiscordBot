@@ -12,8 +12,6 @@ from keep_alive import keep_alive
 logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s',
                     level=logging.INFO)
 
-# Much of this code so far comes from the Discord Bot tutorial @ https://www.freecodecamp.org/news/create-a-discord-bot-with-python/
-
 client = nextcord.Client()
 
 ## Lists sections
@@ -94,6 +92,18 @@ async def on_message(message):
     logging.debug(f'This is my first_word: {first_word}')
     if first_word in (tuple(greetings)):
         await message.channel.send('Hi friend!')
+
+    # Checks to see if I should be helpful or not
+    if msg.startswith('!help'):
+      response = f'''Woof! My name is Quinn! I am a friendly and welcoming Beagle! Here are my list of commands!
+```!inspire - Need an inspiration quote? I can get you a random one from ZenQuotes.com!
+!new [TEXT] - If you have an idea for me to encourage someone should they feel down or sad, you can add a new statement to my memory that I will pull out from time to time if someone needs it! Replace [TEXT] with whatever you'd like me to say!
+!del [int] - Do we need to delete a phrase from my encouragement statements list? pass this command with the index number and I can delete that for you!
+!query encouragements - I can dump my encouragement statements by passing this command!
+$responding [true/false] - Turn on or off my friendly encouraging nature by setting true or false. Pass it without a parameter and I'll let you know if i'll encourage people or not!```
+I also sometimes respond to various keywords in certain situations. I am sure you'll figure out what makes me happy as you get to know me better!
+If you have any questions, my owner can help out! I am, after all, just a loving beagle! Woof!'''
+      await message.channel.send(response)
 
     # Check to see if I should pull out an inspiring quote
     if message.content.startswith('!inspire'):
