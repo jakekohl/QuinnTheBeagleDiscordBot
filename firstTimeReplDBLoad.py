@@ -1,6 +1,6 @@
 import string
 from replit import db
-from quinnDB import *
+import quinnDB
 import logging
 
 
@@ -20,9 +20,10 @@ loves = ['I love my Dad!', 'I love curling up next to my mom!','I love chewing o
 # Function for populating above starting data
 
 def populateKeys(key,value):
-  if key not in getKeys():
-    db[key] = value
-    return logging.info(f'Inserting {key} into database with value(s): {value}')
+  if key not in quinnDB.getKeys():
+    db[key] = list(value)
+    logging.info(f'Inserting {key} into database with value(s): {value}')
+    return
 
 #
 def onStart():

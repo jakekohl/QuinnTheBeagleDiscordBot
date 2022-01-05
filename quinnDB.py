@@ -12,7 +12,7 @@ def deleteKey(key):
 
 # get a specific key value
 def getKeyValues(key):
-  values = db[key]
+  values = list(db[key])
   return values 
 
 # set new key and value 
