@@ -1,11 +1,13 @@
-import string
+import logging
 from replit import db
 import quinnDB
-import logging
 
 
 # This file contains values that default get propagated into Quinn's repl database if the key does not already exist. If it does exist, it will skip inserting these values. 
 
+# Set Logging Config
+logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s',
+                    level=logging.INFO)
 
 
 # Initial Triggers List
