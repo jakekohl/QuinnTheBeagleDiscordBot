@@ -10,7 +10,7 @@ def getKeys():
 def deleteKey(key):
   del db[key]
 
-# get a specific key value
+# get a specific key value/s
 def getKeyValues(key):
   values = list(db[key])
   return values 
@@ -37,9 +37,3 @@ def deleteKeyValue(key,index):
   if len(keyValues) > index:
     del keyValues[index]
   db[key] = keyValues
-
-# Retrieve contents from db[] based on key in the list format
-def get(table):
-  key = table 
-  contents = list(db[key])
-  return contents
